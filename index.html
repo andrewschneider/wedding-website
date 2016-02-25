@@ -15,8 +15,8 @@
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
-        <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.14.2/mapbox-gl.js'></script>
-        <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.14.2/mapbox-gl.css' rel='stylesheet'/>
+        <script src='https://api.mapbox.com/mapbox.js/v2.3.0/mapbox.js'></script>
+        <link href='https://api.mapbox.com/mapbox.js/v2.3.0/mapbox.css' rel='stylesheet' />
 
 <style>
 
@@ -69,15 +69,18 @@ h2 { font-style: italic;
 
 h3 { font-style: italic;
      font-weight: 400;
-     font-size: 1.7rem;
+     font-size: 2.2rem;
      margin-top: 2rem;
      margin-bottom: 0;
      line-height: 1; }
 
+.map-wrapper {
+    padding-top: 20px;
+}
+
 #map {
     height: 400px;
     width: 100%;
-    padding-top: 20px;
 }
 
 </style>
@@ -91,43 +94,34 @@ $(function() {
         $(this).addClass("active");
     });
 
-    mapboxgl.accessToken = "pk.eyJ1IjoiYWRzY2huZWlkZXIiLCJhIjoiSlcxbGd0NCJ9.9iU2iiEVRUSxpiQXkV_zFg";
-    var map = new mapboxgl.Map({
-        container: 'map',
-        center: [-122.3757634, 46.0015171],
-        zoom: 5,
-        style: "mapbox://styles/mapbox/light-v8"
-    });
+    L.mapbox.accessToken = "pk.eyJ1IjoiYWRzY2huZWlkZXIiLCJhIjoiSlcxbGd0NCJ9.9iU2iiEVRUSxpiQXkV_zFg";
+    var map = L.mapbox.map(
+        'map',
+        'mapbox.light',
+        {
+            zoomControl: false
+        }
+    ).setView([45.994231, -122.370786], 6);
 
-    map.on('style.load', function () {
-        map.addSource("markers", {
-            "type": "geojson",
-            "data": {
-                "type": "FeatureCollection",
-                "features": [{
-                    "type": "Feature",
-                    "properties": {
-                        "marker-symbol": "marker"
-                    },
-                    "geometry": {
-                        "type": "Point",
-                        "coordinates": [-122.3757634, 46.0015171]
-                    }
-                }]
-            }
-        });
-        console.log(map);
+    map.dragging.disable();
+    map.touchZoom.disable();
+    map.doubleClickZoom.disable();
+    map.scrollWheelZoom.disable();
+    map.keyboard.disable();
 
-        map.addLayer({
-            "id": "markers",
-            "type": "symbol",
-            "source": "markers",
-            "layout": {
-                "icon-image": "{marker-symbol}-24"
-            }
-        });
+    L.mapbox.featureLayer({
+    type: 'Feature',
+    geometry: {
+        type: 'Point',
+        coordinates: [-122.370786, 45.994231]
+    },
+    properties: {
+        'marker-size': 'large',
+        'marker-color': '#3887BE',
+        'marker-symbol': 'marker'
+    }
+}).addTo(map);
 
-    });
 
 });
 
@@ -138,11 +132,18 @@ $(function() {
     <body>
 
         <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-8 col-md-offset-2">
+
             <ul class="nav nav-justified navbar-nav">
-                <li class="active navbar-link"><a href="#location">Location</a></li>
+                <li class="navbar-link"><a href="#location">Location</a></li>
                 <li class="navbar-link"><a href="#schedule">Schedule</a></li>
                 <li class="navbar-link"><a href="#accomodations">Accomodations</a></li>
+                <li class="navbar-link"><a href="#odds-n-ends">Odds 'n Ends</a></li>
             </ul>
+            </div></div></div>
+
         </nav>
 
         <div class="container-fluid">
@@ -155,35 +156,48 @@ $(function() {
                             <h2 class="centered-title">July 29-31, 2016 | Ariel, WA</h2>
                         </div>
 
-                        <div class="row section">
-                            <div class="col-sm-10 col-sm-offset-1">
-                                <img class="top-image" src="http://placehold.it/400x200/">
-                            </div>
+                        <div class="section">
+                            <img class="top-image" src="http://placehold.it/400x200/">
                         </div>
 
                         <hr>
 
                         <div class="section" id="location">
                             <h2 class="centered-title">Location</h2>
-                            <div id="map"></div>
+                            <div class="map-wrapper"><div id="map"></div></div>
+                            <div class="row centered-div"><h3 class="centered-title">Anderson Lodge <a href="http://www.andersonlodge.com" target="_blank">[link]</a></h3></div>
+                            <h4 class="centered-title">12025 Lewis River Road</h4>
+                            <h4 class="centered-title">Ariel, WA  98603</h4>
                         </div>
 
                         <hr>
 
                         <div class="section" id="schedule">
                             <h2 class="centered-title">Schedule</h2>
+                            <h3 class="centered-title">Friday, July 29th</h3>
+                            <h4 class="centered-title">12pm - Welcome Lunch</h4>
+                            <h4 class="centered-title">7pm - Rehearsal Dinner</h4>
+                            <h3 class="centered-title">Saturday, July 30th</h3>
+                            <h4 class="centered-title">5pm - The Weddin'</h4>
+                            <h4 class="centered-title">6pm - Drinks, Dinner, Dancing</h4>
                         </div>
 
                         <hr>
 
                         <div class="section" id="accomodations">
                             <h2 class="centered-title">Accomodations</h2>
+                            <h3 class="centered-title">Anderson Lodge</h3>
+                            <h4 class="centered-title">Camping...</h4>
+                            <h3 class="centered-title">Woodland, WA</h3>
+                            <h4 class="centered-title">Hotels...</h4>
+                            <h3 class="centered-title">Cougar, WA</h3>
+                            <h4 class="centered-title">BnBs...</h4>
                         </div>
 
                         <hr>
 
-                        <div class="section" id="misc">
-                            <h2 class="centered-title">Miscellaneous</h2>
+                        <div class="section" id="odds-n-ends">
+                            <h2 class="centered-title">Odds 'n Ends</h2>
                         </div>
 
                     </div>
