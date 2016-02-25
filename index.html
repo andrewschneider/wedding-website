@@ -16,10 +16,7 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
         <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.14.2/mapbox-gl.js'></script>
-        <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.14.2/mapbox-gl.css' rel='stylesheet' />
-
-
-<!--         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"> -->
+        <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.14.2/mapbox-gl.css' rel='stylesheet'/>
 
 <style>
 
@@ -30,17 +27,13 @@
              font-weight: normal;
              font-style: italic; }
 
-
-body{
-/*    background-color:#29364D;*/
-
+body {
     font-family: ETBembo, Palatino, "Palatino Linotype", "Palatino LT STD", "Book Antiqua", Georgia, serif;
     background-color: #fffff8;
-    background-image: url("../img/pw_maze_white.png");
-    padding-bottom: 0;
+    padding-bottom: 40px;
     padding-top: 80px;
-/*    font-family: 'Roboto', sans-serif;*/
 }
+
 
 .navbar-nav>li {
     float: none;
@@ -51,44 +44,90 @@ body{
     height: auto;
 }
 
-.page-content {
-/*    background-color: white;*/
-}
-
 .centered-title {
     text-align: center;
 }
 
 .section {
     padding-bottom: 20px;
-    padding-top: 20px;
+    padding-top: 0px;
 }
 
 
-#map { height: 400px; width: 100%; }
+h1 { font-weight: 400;
+     margin-top: 4rem;
+     margin-bottom: 1.5rem;
+     font-size: 3.2rem;
+     line-height: 1; }
+
+h2 { font-style: italic;
+     font-weight: 400;
+     margin-top: 2.1rem;
+     margin-bottom: 0;
+     font-size: 2.7rem;
+     line-height: 1; }
+
+h3 { font-style: italic;
+     font-weight: 400;
+     font-size: 1.7rem;
+     margin-top: 2rem;
+     margin-bottom: 0;
+     line-height: 1; }
+
+#map {
+    height: 400px;
+    width: 100%;
+    padding-top: 20px;
+}
+
 </style>
 
 <script>
 
 $(function() {
 
-$(".navbar-link").click(function () {
-    console.log(this);
-    $(".navbar-link").removeClass("active");
-    $(this).addClass("active");
-});
+    $(".navbar-link").click(function () {
+        $(".navbar-link").removeClass("active");
+        $(this).addClass("active");
+    });
 
+    mapboxgl.accessToken = "pk.eyJ1IjoiYWRzY2huZWlkZXIiLCJhIjoiSlcxbGd0NCJ9.9iU2iiEVRUSxpiQXkV_zFg";
+    var map = new mapboxgl.Map({
+        container: 'map',
+        center: [-122.3757634, 46.0015171],
+        zoom: 5,
+        style: "mapbox://styles/mapbox/light-v8"
+    });
 
-mapboxgl.accessToken = "pk.eyJ1IjoiYWRzY2huZWlkZXIiLCJhIjoiSlcxbGd0NCJ9.9iU2iiEVRUSxpiQXkV_zFg";
-var map = new mapboxgl.Map({
-  container: 'map',
-  center: [-122.3757634, 46.0015171],
-  zoom: 7,
-  style: "mapbox://styles/mapbox/basic-v8"
-});
+    map.on('style.load', function () {
+        map.addSource("markers", {
+            "type": "geojson",
+            "data": {
+                "type": "FeatureCollection",
+                "features": [{
+                    "type": "Feature",
+                    "properties": {
+                        "marker-symbol": "marker"
+                    },
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [-122.3757634, 46.0015171]
+                    }
+                }]
+            }
+        });
+        console.log(map);
 
+        map.addLayer({
+            "id": "markers",
+            "type": "symbol",
+            "source": "markers",
+            "layout": {
+                "icon-image": "{marker-symbol}-24"
+            }
+        });
 
-// todo: add marker
+    });
 
 });
 
@@ -100,9 +139,9 @@ var map = new mapboxgl.Map({
 
         <nav class="navbar navbar-default navbar-fixed-top">
             <ul class="nav nav-justified navbar-nav">
-                <li class="active navbar-link"><a href="#">Link1</a></li>
-                <li class="navbar-link"><a href="#">Link2</a></li>
-                <li class="navbar-link"><a href="#">Link3</a></li>
+                <li class="active navbar-link"><a href="#location">Location</a></li>
+                <li class="navbar-link"><a href="#schedule">Schedule</a></li>
+                <li class="navbar-link"><a href="#accomodations">Accomodations</a></li>
             </ul>
         </nav>
 
@@ -112,10 +151,9 @@ var map = new mapboxgl.Map({
                     <div class="page-content">
 
                         <div class="section">
-                            <h2 class="centered-title">Page Title</h2>
+                            <h1 class="centered-title">Alicia &amp; Andrew</h1>
+                            <h2 class="centered-title">July 29-31, 2016 | Ariel, WA</h2>
                         </div>
-
-                        <hr>
 
                         <div class="row section">
                             <div class="col-sm-10 col-sm-offset-1">
@@ -125,31 +163,27 @@ var map = new mapboxgl.Map({
 
                         <hr>
 
-                        <div class="section">
-                            <h3 class="centered-title">Map Section Title</h3>
-
-                            <div id="map">
-
-                            </div>
-
+                        <div class="section" id="location">
+                            <h2 class="centered-title">Location</h2>
+                            <div id="map"></div>
                         </div>
 
                         <hr>
 
-                        <div class="section">
-                            <h3 class="centered-title">Section Title</h3>
+                        <div class="section" id="schedule">
+                            <h2 class="centered-title">Schedule</h2>
                         </div>
 
                         <hr>
 
-                        <div class="section">
-                            <h3 class="centered-title">Section Title</h3>
+                        <div class="section" id="accomodations">
+                            <h2 class="centered-title">Accomodations</h2>
                         </div>
 
                         <hr>
 
-                        <div class="section">
-                            <h3 class="centered-title">Section Title</h3>
+                        <div class="section" id="misc">
+                            <h2 class="centered-title">Miscellaneous</h2>
                         </div>
 
                     </div>
